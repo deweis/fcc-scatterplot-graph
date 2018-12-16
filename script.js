@@ -8,3 +8,8 @@ fetch(
   .then(function(data) {
     console.log(data);
   });
+
+// Go through fCC Challenges and create chart in parallel
+// Add 2nd color/dataset
+// Add animation
+// Make it responsive

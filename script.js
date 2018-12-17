@@ -42,7 +42,7 @@ function updateChart(data) {
 
   const yScale = d3
     .scaleLinear()
-    .domain([minY, maxY])
+    .domain([maxY, minY])
     .range([h - padding, padding]);
 
   // Add the SVG
@@ -51,6 +51,20 @@ function updateChart(data) {
     .append('svg')
     .attr('width', w)
     .attr('height', h);
+
+  // Add the axes
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3.axisLeft(yScale);
+
+  svg
+    .append('g')
+    .attr('transform', 'translate(0,' + (h - padding) + ')')
+    .call(xAxis);
+
+  svg
+    .append('g')
+    .attr('transform', 'translate(' + padding + ',0)')
+    .call(yAxis);
 
   // Add the data points
   svg

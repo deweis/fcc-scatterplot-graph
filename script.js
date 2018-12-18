@@ -58,6 +58,7 @@ function updateChart(data) {
 
   svg
     .append('g')
+    .attr('id', 'x-axis')
     .attr('transform', 'translate(0,' + (h - padding) + ')')
     .call(xAxis);
 

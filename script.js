@@ -64,6 +64,7 @@ function updateChart(data) {
 
   svg
     .append('g')
+    .attr('id', 'y-axis')
     .attr('transform', 'translate(' + padding + ',0)')
     .call(yAxis);
 

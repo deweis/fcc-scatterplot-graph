@@ -9,7 +9,6 @@ fetch(
     updateChart(data);
   });
 
-// Go through fCC Challenges and create chart in parallel
 // Add 2nd color/dataset
 // Add animation
 // Make it responsive
@@ -20,22 +19,21 @@ function updateChart(data) {
     x.Year,
     Number(x.Year) / 100,
     x.Time,
-    Number(x.Time.replace(':', '')) / 100
+    Number(x.Time.replace(':', '') / 100),
+    new Date(-3600000 + x.Seconds * 1000)
   ]);
-
-  console.log(dataset);
 
   const w = 500;
   const h = 500;
 
   // Padding between the SVG canvas boundary and the plot
-  const padding = 30;
+  const padding = 35;
 
   // Create an x and y scale
   const minX = d3.min(dataset, d => d[0] - 1);
   const maxX = d3.max(dataset, d => d[0] + 1);
-  const minY = d3.min(dataset, d => d[3]);
-  const maxY = d3.max(dataset, d => d[3]);
+  const minY = d3.min(dataset, d => d[4]);
+  const maxY = d3.max(dataset, d => d[4]);
 
   const xScale = d3
     .scaleLinear()
@@ -56,7 +54,7 @@ function updateChart(data) {
 
   // Add the axes
   const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('')); // format years as string
-  const yAxis = d3.axisLeft(yScale);
+  const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%M:%S'));
 
   svg
     .append('g')
@@ -67,7 +65,7 @@ function updateChart(data) {
   svg
     .append('g')
     .attr('id', 'y-axis')
-    .attr('transform', 'translate(' + padding + ',0)')
+    .attr('transform', `translate(${padding}, 0)`)
     .call(yAxis);
 
   // Add the data points
@@ -78,8 +76,9 @@ function updateChart(data) {
     .append('circle')
     .attr('class', 'dot')
     .attr('data-xvalue', d => d[0])
+    .attr('data-yvalue', d => d[4])
     .attr('cx', d => padding + xScale(d[0]))
-    .attr('cy', d => yScale(d[3]))
+    .attr('cy', d => yScale(d[4]))
     .attr('r', 5);
 
   // Add the labels

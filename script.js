@@ -23,6 +23,8 @@ function updateChart(data) {
     Number(x.Time.replace(':', '')) / 100
   ]);
 
+  console.log(dataset);
+
   const w = 500;
   const h = 500;
 
@@ -30,15 +32,15 @@ function updateChart(data) {
   const padding = 30;
 
   // Create an x and y scale
-  const minX = d3.min(dataset, d => d[0]);
-  const maxX = d3.max(dataset, d => d[0]);
+  const minX = d3.min(dataset, d => d[0] - 1);
+  const maxX = d3.max(dataset, d => d[0] + 1);
   const minY = d3.min(dataset, d => d[3]);
   const maxY = d3.max(dataset, d => d[3]);
 
   const xScale = d3
     .scaleLinear()
     .domain([minX, maxX])
-    .range([padding, w - padding]);
+    .range([0, w - 1.5 * padding]);
 
   const yScale = d3
     .scaleLinear()
@@ -53,13 +55,13 @@ function updateChart(data) {
     .attr('height', h);
 
   // Add the axes
-  const xAxis = d3.axisBottom(xScale);
+  const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('')); // format years as string
   const yAxis = d3.axisLeft(yScale);
 
   svg
     .append('g')
     .attr('id', 'x-axis')
-    .attr('transform', 'translate(0,' + (h - padding) + ')')
+    .attr('transform', `translate(${padding}, ${h - padding})`)
     .call(xAxis);
 
   svg
@@ -74,17 +76,19 @@ function updateChart(data) {
     .data(dataset)
     .enter()
     .append('circle')
-    .attr('cx', d => xScale(d[0]))
+    .attr('class', 'dot')
+    .attr('data-xvalue', d => d[0])
+    .attr('cx', d => padding + xScale(d[0]))
     .attr('cy', d => yScale(d[3]))
     .attr('r', 5);
 
   // Add the labels
-  svg
-    .selectAll('text')
-    .data(dataset)
-    .enter()
-    .append('text')
-    .text(d => `${d[0]}, ${d[2]}`)
-    .attr('x', d => xScale(d[0]) + 10)
-    .attr('y', d => yScale(d[3]));
+  // svg
+  //   .selectAll('text')
+  //   .data(dataset)
+  //   .enter()
+  //   .append('text')
+  //   .text(d => `${d[0]}, ${d[2]}`)
+  //   .attr('x', d => xScale(d[0]) + 10)
+  //   .attr('y', d => yScale(d[3]));
 }

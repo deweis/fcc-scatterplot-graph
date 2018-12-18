@@ -17,9 +17,6 @@ fetch(
 function updateChart(data) {
   const dataset = data.map(x => [
     x.Year,
-    Number(x.Year) / 100,
-    x.Time,
-    Number(x.Time.replace(':', '') / 100),
     new Date(-3600000 + x.Seconds * 1000)
   ]);
 
@@ -32,8 +29,8 @@ function updateChart(data) {
   // Create an x and y scale
   const minX = d3.min(dataset, d => d[0] - 1);
   const maxX = d3.max(dataset, d => d[0] + 1);
-  const minY = d3.min(dataset, d => d[4]);
-  const maxY = d3.max(dataset, d => d[4]);
+  const minY = d3.min(dataset, d => d[1]);
+  const maxY = d3.max(dataset, d => d[1]);
 
   const xScale = d3
     .scaleLinear()
@@ -76,18 +73,8 @@ function updateChart(data) {
     .append('circle')
     .attr('class', 'dot')
     .attr('data-xvalue', d => d[0])
-    .attr('data-yvalue', d => d[4])
+    .attr('data-yvalue', d => d[1])
     .attr('cx', d => padding + xScale(d[0]))
-    .attr('cy', d => yScale(d[4]))
+    .attr('cy', d => yScale(d[1]))
     .attr('r', 5);
-
-  // Add the labels
-  // svg
-  //   .selectAll('text')
-  //   .data(dataset)
-  //   .enter()
-  //   .append('text')
-  //   .text(d => `${d[0]}, ${d[2]}`)
-  //   .attr('x', d => xScale(d[0]) + 10)
-  //   .attr('y', d => yScale(d[3]));
 }

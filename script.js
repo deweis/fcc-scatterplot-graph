@@ -9,7 +9,7 @@ fetch(
     updateChart(data);
   });
 
-// Add 2nd color/dataset
+// Add tooltips
 // Add animation
 // Make it responsive
 
@@ -79,4 +79,40 @@ function updateChart(data) {
     .attr('cx', d => padding + xScale(d[0]))
     .attr('cy', d => yScale(d[1]))
     .attr('r', 5);
+
+  // Add the legends
+  svg
+    .append('rect')
+    .attr('x', w - 150)
+    .attr('y', h - h + 50)
+    .attr('width', 10)
+    .attr('height', 10)
+    .style('fill', '#81c784'); // green lighten-2
+
+  svg
+    .append('text')
+    .attr('x', w - 135)
+    .attr('y', h - h + 60)
+    .attr('id', 'legend')
+    .attr('class', 'legend')
+    .attr('width', 50)
+    .attr('height', 50)
+    .text('No Doping allegations');
+
+  svg
+    .append('rect')
+    .attr('x', w - 150)
+    .attr('y', 65)
+    .attr('width', 10)
+    .attr('height', 10)
+    .style('fill', '#e57373'); // red lighten-2
+
+  svg
+    .append('text')
+    .attr('x', w - 135)
+    .attr('y', 75)
+    .attr('class', 'legend')
+    .attr('width', 50)
+    .attr('height', 50)
+    .text('With Doping allegations');
 }

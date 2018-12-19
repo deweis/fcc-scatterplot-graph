@@ -17,7 +17,8 @@ fetch(
 function updateChart(data) {
   const dataset = data.map(x => [
     x.Year,
-    new Date(-3600000 + x.Seconds * 1000)
+    new Date(-3600000 + x.Seconds * 1000),
+    x.Doping
   ]);
 
   const w = 500;
@@ -72,6 +73,7 @@ function updateChart(data) {
     .enter()
     .append('circle')
     .attr('class', 'dot')
+    .attr('fill', d => (d[2] === '' ? '#81c784' : '#e57373')) //  Doping: No: green lighten-2 / Yes: red lighten-2
     .attr('data-xvalue', d => d[0])
     .attr('data-yvalue', d => d[1])
     .attr('cx', d => padding + xScale(d[0]))

@@ -5,6 +5,12 @@ body {
 
 h1 {
   color: #616161; /* grey darken-2 */
+  margin-bottom: 5px;
+}
+
+h4 {
+  color: #ef9a9a; /* red lighten-3 */
+  margin: 0;
 }
 
 .legend {

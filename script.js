@@ -9,7 +9,7 @@ fetch(
     updateChart(data);
   });
 
-// Add tooltips
+// Add scale description
 // Add animation
 // Make it responsive
 
@@ -18,16 +18,18 @@ function updateChart(data) {
   const dataset = data.map(x => [
     x.Year,
     new Date(-3600000 + x.Seconds * 1000),
-    x.Doping
+    x.Doping,
+    x.Name,
+    x.Nationality
   ]);
 
   const w = 500;
   const h = 500;
 
-  // Padding between the SVG canvas boundary and the plot
+  /* Padding between the SVG canvas boundary and the plot */
   const padding = 35;
 
-  // Create an x and y scale
+  /* Create an x and y scale */
   const minX = d3.min(dataset, d => d[0] - 1);
   const maxX = d3.max(dataset, d => d[0] + 1);
   const minY = d3.min(dataset, d => d[1]);
@@ -43,14 +45,14 @@ function updateChart(data) {
     .domain([maxY, minY])
     .range([h - padding, padding]);
 
-  // Add the SVG
+  /* Add the SVG */
   const svg = d3
     .select('#chartContainer')
     .append('svg')
     .attr('width', w)
     .attr('height', h);
 
-  // Add the axes
+  /* Add the axes */
   const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('')); // format years as string
   const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%M:%S'));
 
@@ -66,7 +68,7 @@ function updateChart(data) {
     .attr('transform', `translate(${padding}, 0)`)
     .call(yAxis);
 
-  // Add the data points
+  /* Add the data points */
   svg
     .selectAll('circle')
     .data(dataset)
@@ -80,7 +82,7 @@ function updateChart(data) {
     .attr('cy', d => yScale(d[1]))
     .attr('r', 5);
 
-  // Add the legends
+  /* Add the legends */
   svg
     .append('rect')
     .attr('x', w - 150)
@@ -115,4 +117,49 @@ function updateChart(data) {
     .attr('width', 50)
     .attr('height', 50)
     .text('With Doping allegations');
+
+  /* Define the div for the tooltip 
+Thank you: http://bl.ocks.org/d3noob/a22c42db65eb00d4e369  */
+  const divTooltip = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'tooltip')
+    .attr('id', 'tooltip')
+    .style('opacity', 0);
+
+  /* Show the tooltip when hovering */
+  svg
+    .selectAll('circle')
+    .on('mouseover', d => {
+      const formatTime = d3.timeFormat('%M:%S');
+      const doped = d[2] === '' ? '' : `<br><br>${d[2]}`;
+      const well =
+        d[2] === '' ? '<br><br>Well, seems he had a good doctor..😉' : '';
+
+      divTooltip
+        .transition()
+        .duration(200)
+        .style('opacity', 0.9)
+        .attr('data-year', d[0]);
+
+      divTooltip
+        .html(
+          `
+          ${d[3]}: ${d[4]}<br>
+          Year: ${d[0]},  Time: ${formatTime(d[1])}
+          ${doped}
+          ${well}
+          `
+        )
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY - 35 + 'px')
+        .style('background', doped ? '#ffcdd2' : '#c8e6c9'); //  Doping: Yes: red lighten-4 / No: green lighten-4
+    })
+    .on('mouseout', d => {
+      /* Hide the tooltip when hovering out */
+      divTooltip
+        .transition()
+        .duration(500)
+        .style('opacity', 0);
+    });
 }

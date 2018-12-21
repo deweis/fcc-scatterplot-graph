@@ -11,8 +11,6 @@ fetch(
 
 // Add scale description
 // Change legend and scale texts to slight grey
-// Add animation
-// Make it responsive
 
 /********** Create the chart *********/
 function updateChart(data) {
@@ -83,13 +81,18 @@ function updateChart(data) {
     .data(dataset)
     .enter()
     .append('circle')
+    /* Add the transition 
+       thank you: https://codepen.io/HIC/full/JaaEOa/*/
+    .transition()
+    .duration(0)
+    .delay((d, i) => i * 80)
+    .attr('cx', d => padding + xScale(d[0]))
+    .attr('cy', d => yScale(d[1]))
+    .attr('r', 5)
     .attr('class', 'dot')
     .attr('fill', d => (d[2] === '' ? '#81c784' : '#e57373')) //  Doping: No: green lighten-2 / Yes: red lighten-2
     .attr('data-xvalue', d => d[0])
-    .attr('data-yvalue', d => d[1])
-    .attr('cx', d => padding + xScale(d[0]))
-    .attr('cy', d => yScale(d[1]))
-    .attr('r', 5);
+    .attr('data-yvalue', d => d[1]);
 
   /* Add the legends */
   svg

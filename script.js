@@ -10,6 +10,7 @@ fetch(
   });
 
 // Add scale description
+// Change legend and scale texts to slight grey
 // Add animation
 // Make it responsive
 
@@ -49,8 +50,16 @@ function updateChart(data) {
   const svg = d3
     .select('#chartContainer')
     .append('svg')
+    .attr('id', 'chart')
     .attr('width', w)
-    .attr('height', h);
+    .attr('height', h)
+    /*
+      Make it responsive
+        Thank you: https://stackoverflow.com/a/9539361 resp. http://jsfiddle.net/shawnbot/BJLe6/
+    */
+    //.attr('viewBox', '0 0 ' + w + ' ' + h)
+    .attr('viewBox', `0 0 ${w} ${h}`)
+    .attr('preserveAspectRatio', 'xMidYMid');
 
   /* Add the axes */
   const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('')); // format years as string
@@ -163,3 +172,21 @@ Thank you: http://bl.ocks.org/d3noob/a22c42db65eb00d4e369  */
         .style('opacity', 0);
     });
 }
+
+/*
+  Make it responsive
+    Thank you: https://stackoverflow.com/a/9539361 resp. http://jsfiddle.net/shawnbot/BJLe6/
+*/
+$(function() {
+  const chart = $('#chart'),
+    aspect = chart.width() / chart.height(),
+    container = chart.parent();
+
+  $(window)
+    .on('resize', function() {
+      const targetWidth = container.width() > 600 ? 600 : container.width();
+      chart.attr('width', targetWidth);
+      chart.attr('height', Math.round(targetWidth / aspect));
+    })
+    .trigger('resize');
+});

@@ -22,8 +22,8 @@ function updateChart(data) {
     x.Nationality
   ]);
 
-  const w = 500;
-  const h = 500;
+  const w = 600;
+  const h = 600;
 
   /* Padding between the SVG canvas boundary and the plot */
   const padding = 35;
@@ -55,7 +55,6 @@ function updateChart(data) {
       Make it responsive
         Thank you: https://stackoverflow.com/a/9539361 resp. http://jsfiddle.net/shawnbot/BJLe6/
     */
-    //.attr('viewBox', '0 0 ' + w + ' ' + h)
     .attr('viewBox', `0 0 ${w} ${h}`)
     .attr('preserveAspectRatio', 'xMidYMid');
 
@@ -185,9 +184,15 @@ $(function() {
     aspect = chart.width() / chart.height(),
     container = chart.parent();
 
+  /* Set inital widgth/height based on browser width */
+  let targetWidth = container.width() > 600 ? 600 : container.width();
+  chart.attr('width', targetWidth);
+  chart.attr('height', Math.round(targetWidth / aspect));
+
+  /* Adjust size if window is being resized */
   $(window)
     .on('resize', function() {
-      const targetWidth = container.width() > 600 ? 600 : container.width();
+      targetWidth = container.width() > 600 ? 600 : container.width();
       chart.attr('width', targetWidth);
       chart.attr('height', Math.round(targetWidth / aspect));
     })

@@ -13,6 +13,10 @@ h4 {
   margin: 0;
 }
 
+.axis {
+  color: #757575; /* grey darken-1 */
+}
+
 .legend {
   font-size: 0.8em;
 }

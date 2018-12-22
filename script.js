@@ -10,7 +10,7 @@ fetch(
   });
 
 // Add scale description
-// Change legend and scale texts to slight grey
+// Put to codepen and solve challenge
 
 /********** Create the chart *********/
 function updateChart(data) {
@@ -65,12 +65,14 @@ function updateChart(data) {
   svg
     .append('g')
     .attr('id', 'x-axis')
+    .attr('class', 'axis')
     .attr('transform', `translate(${padding}, ${h - padding})`)
     .call(xAxis);
 
   svg
     .append('g')
     .attr('id', 'y-axis')
+    .attr('class', 'axis')
     .attr('transform', `translate(${padding}, 0)`)
     .call(yAxis);
 
@@ -110,6 +112,7 @@ function updateChart(data) {
     .attr('class', 'legend')
     .attr('width', 50)
     .attr('height', 50)
+    .style('fill', '#757575') // grey darken-1
     .text('No Doping allegations');
 
   svg
@@ -127,6 +130,7 @@ function updateChart(data) {
     .attr('class', 'legend')
     .attr('width', 50)
     .attr('height', 50)
+    .style('fill', '#757575') // grey darken-1
     .text('With Doping allegations');
 
   /* Define the div for the tooltip 

@@ -9,9 +9,6 @@ fetch(
     updateChart(data);
   });
 
-// Add scale description
-// Put to codepen and solve challenge
-
 /********** Create the chart *********/
 function updateChart(data) {
   const dataset = data.map(x => [
@@ -26,7 +23,7 @@ function updateChart(data) {
   const h = 600;
 
   /* Padding between the SVG canvas boundary and the plot */
-  const padding = 35;
+  const padding = 55;
 
   /* Create an x and y scale */
   const minX = d3.min(dataset, d => d[0] - 1);
@@ -75,6 +72,15 @@ function updateChart(data) {
     .attr('class', 'axis')
     .attr('transform', `translate(${padding}, 0)`)
     .call(yAxis);
+
+  svg
+    .append('text')
+    .attr('class', 'axis-description')
+    .text('Time in Minutes')
+    .attr('transform', 'rotate(-90)')
+    .style('fill', '#757575') // grey darken-1
+    .attr('x', -183)
+    .attr('y', 14);
 
   /* Add the data points */
   svg
